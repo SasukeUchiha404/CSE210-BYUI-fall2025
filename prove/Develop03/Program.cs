@@ -1,3 +1,41 @@
+// ============================================================================
+// Scripture Memorizer Console Application
+// ----------------------------------------------------------------------------
+// Description:
+//    This interactive console application helps users memorize scriptures.
+//    - The program will create an empty "scripture.txt" file if one does not exist.
+//    - On first scripture addition, prompts for book, chapter, start verse,
+//      and end verse (or single verse if start and end are the same).
+//    - Users can add new scriptures through the menu at any time.
+//    - Properly formatted "scripture.txt" files can be loaded directly.
+//
+//    Main Menu:
+//        === Scripture Memorizer ===
+//        1. Start Memorizing (Random)
+//        2. Choose a Scripture to Memorize
+//        3. View All Scriptures
+//        4. Add a New Scripture
+//        5. Exit
+//
+//    In memorizing mode, words of the selected scripture disappear (replaced
+//    by underscores) one keypress at a time. When all words are hidden,
+//    the user is returned to the menu.
+//
+// Class Design:
+//    - Program              : Entry point & main menu navigation.
+//    - Scripture            : Represents a scripture (reference + words),
+//                             handles word hiding, resetting, and display logic.
+//    - Reference            : Represents a scripture reference, supporting both
+//                             single verses and verse ranges (e.g. "John 3:16",
+//                             "Proverbs 3:5–6").
+//    - Word                 : Represents a single word (text + visibility state).
+//    - ScriptureFileHelper  : Handles saving/loading scriptures to/from "scripture.txt".
+//
+// Author:        Christian Chan
+// Date Finished:  OCT 25th 2025
+// ============================================================================
+
+
 using System;
 using System.Collections.Generic;
 
@@ -23,7 +61,7 @@ namespace ScriptureMemorizer
                 Console.WriteLine("3. View All Scriptures");
                 Console.WriteLine("4. Add a New Scripture");
                 Console.WriteLine("5. Exit");
-                Console.Write("Select an option (1–5): ");
+                Console.Write("Select an option (1-5): ");
 
                 string choice = Console.ReadLine()?.Trim();
 
@@ -58,6 +96,7 @@ namespace ScriptureMemorizer
             {
                 Console.WriteLine("\nNo scriptures available. Please add one first.");
                 Console.ReadLine();
+                
                 return;
             }
 
