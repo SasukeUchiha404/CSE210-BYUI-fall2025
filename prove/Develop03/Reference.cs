@@ -1,36 +1,39 @@
 namespace ScriptureMemorizer
 {
-    // Represents a scripture reference (e.g., "John 3:16" or "Proverbs 3:5–6")
-    // Supports both single verses and verse ranges.
+    // Represents a scripture reference (e.g. John 3:16 or Proverbs 3:5–6).
     class Reference
     {
-        public string Book { get; }
-        public int Chapter { get; }
-        public int StartVerse { get; }
-        public int EndVerse { get; }
+        private string _book;
+        private int _chapter;
+        private int _startVerse;
+        private int _endVerse;
 
-        // Constructor for single-verse references
         public Reference(string book, int chapter, int verse)
         {
-            Book = book;
-            Chapter = chapter;
-            StartVerse = verse;
-            EndVerse = verse;
+            _book = book;
+            _chapter = chapter;
+            _startVerse = verse;
+            _endVerse = verse;
         }
 
-        // Constructor for verse ranges
         public Reference(string book, int chapter, int startVerse, int endVerse)
         {
-            Book = book;
-            Chapter = chapter;
-            StartVerse = startVerse;
-            EndVerse = endVerse;
+            _book = book;
+            _chapter = chapter;
+            _startVerse = startVerse;
+            _endVerse = endVerse;
         }
 
-        // Returns formatted reference text (e.g., "John 3:16" or "Proverbs 3:5–6")
-        public string ToDisplayString() =>
-            StartVerse == EndVerse
-                ? $"{Book} {Chapter}:{StartVerse}"
-                : $"{Book} {Chapter}:{StartVerse}-{EndVerse}";
+        public string GetBook() { return _book; }
+        public int GetChapter() { return _chapter; }
+        public int GetStartVerse() { return _startVerse; }
+        public int GetEndVerse() { return _endVerse; }
+
+        public string ToDisplayString()
+        {
+            if (_startVerse == _endVerse)
+                return $"{_book} {_chapter}:{_startVerse}";
+            return $"{_book} {_chapter}:{_startVerse}-{_endVerse}";
+        }
     }
 }

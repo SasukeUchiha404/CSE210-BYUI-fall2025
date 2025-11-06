@@ -2,54 +2,39 @@
 // Scripture Memorizer Console Application
 // ----------------------------------------------------------------------------
 // Description:
-//    This interactive console application helps users memorize scriptures.
-//    - The program will create an empty "scripture.txt" file if one does not exist.
-//    - On first scripture addition, prompts for book, chapter, start verse,
-//      and end verse (or single verse if start and end are the same).
-//    - Users can add new scriptures through the menu at any time.
-//    - Properly formatted "scripture.txt" files can be loaded directly.
+//     Interactive console app that helps users memorize scriptures easily.
+//     - Loads and saves scriptures to scripture.txt
+//     - Prompts user gracefully when file missing or invalid
+//     - In memorization mode, words disappear progressively
 //
-//    Main Menu:
-//        === Scripture Memorizer ===
-//        1. Start Memorizing (Random)
-//        2. Choose a Scripture to Memorize
-//        3. View All Scriptures
-//        4. Add a New Scripture
-//        5. Exit
-//
-//    In memorizing mode, words of the selected scripture disappear (replaced
-//    by underscores) one keypress at a time. When all words are hidden,
-//    the user is returned to the menu.
-//
-// Class Design:
-//    - Program              : Entry point & main menu navigation.
-//    - Scripture            : Represents a scripture (reference + words),
-//                             handles word hiding, resetting, and display logic.
-//    - Reference            : Represents a scripture reference, supporting both
-//                             single verses and verse ranges (e.g. "John 3:16",
-//                             "Proverbs 3:5–6").
-//    - Word                 : Represents a single word (text + visibility state).
-//    - ScriptureFileHelper  : Handles saving/loading scriptures to/from "scripture.txt".
-//
-// Author:        Christian Chan
-// Date Finished:  OCT 25th 2025
+// Updated: November 6, 2025
+// Standards applied:
+//     - PascalCase for class/method names
+//     - _camelCase for fields
+//     - Explicit getter/setter methods (no properties)
+//     - Added input validation and safe file handling
 // ============================================================================
-
 
 using System;
 using System.Collections.Generic;
 
 namespace ScriptureMemorizer
 {
-    // Main program class for interacting with the user.
     class Program
     {
-        private const string FilePath = "scriptures.txt"; // Scripture data file
+        private const string _filePath = "scriptures.txt"; // Scripture storage file path
 
         static void Main()
         {
-            // Load existing scriptures from file
-            List<Scripture> scriptures = ScriptureFileHelper.LoadScriptures(FilePath);
+            // Attempt to load existing scriptures
+            List<Scripture> scriptures = ScriptureFileHelper.LoadScriptures(_filePath);
+
+            // If no file or empty, notify user to add manually
+            if (scriptures.Count == 0)
+            {
+                Console.WriteLine("No existing scriptures found.");
+                Console.WriteLine("Please add new scriptures manually through the menu.\n");
+            }
 
             // Main menu loop
             while (true)
@@ -61,7 +46,7 @@ namespace ScriptureMemorizer
                 Console.WriteLine("3. View All Scriptures");
                 Console.WriteLine("4. Add a New Scripture");
                 Console.WriteLine("5. Exit");
-                Console.Write("Select an option (1-5): ");
+                Console.Write("Select an option (1–5): ");
 
                 string choice = Console.ReadLine()?.Trim();
 
@@ -89,70 +74,66 @@ namespace ScriptureMemorizer
             }
         }
 
-        // Start memorization with a random scripture from the list
+        // Starts memorization with a random scripture.
         private static void StartRandomMemorizer(List<Scripture> scriptures)
         {
             if (scriptures.Count == 0)
             {
                 Console.WriteLine("\nNo scriptures available. Please add one first.");
                 Console.ReadLine();
-                
                 return;
             }
 
             Random random = new Random();
             Scripture scripture = scriptures[random.Next(scriptures.Count)];
-            scripture.Reset();  // Reset word visibility so scripture is fully visible
+            scripture.Reset();
             RunMemorizationLoop(scripture);
         }
 
-        // Allows user to pick a scripture and memorize it
+        // Allows user to choose a scripture to memorize.
         private static void ChooseAndMemorize(List<Scripture> scriptures)
         {
             if (scriptures.Count == 0)
             {
-                Console.WriteLine("\nNo scriptures available. Add one first!");
+                Console.WriteLine("\nNo scriptures found. Add one first!");
                 Console.ReadLine();
                 return;
             }
 
             Console.Clear();
-            Console.WriteLine("=== Select a Scripture ===");
+            Console.WriteLine("=== Choose a Scripture ===");
             for (int i = 0; i < scriptures.Count; i++)
             {
-                var referenceText = scriptures[i].GetReference().ToDisplayString();
-                var previewWords = scriptures[i].GetOriginalText().Split(' ');
-                string preview = string.Join(" ", previewWords[..Math.Min(5, previewWords.Length)]);
-                Console.WriteLine($"{i + 1}. {referenceText} - {preview}...");
+                string reference = scriptures[i].GetReference().ToDisplayString();
+                string preview = scriptures[i].GetOriginalText().Split(' ')[0];
+                Console.WriteLine($"{i + 1}. {reference} - {preview}...");
             }
 
-            Console.Write("\nEnter the number of the scripture: ");
-            if (int.TryParse(Console.ReadLine(), out int choice) &&
-                choice > 0 && choice <= scriptures.Count)
+            Console.Write("\nSelect the number of a scripture: ");
+            if (int.TryParse(Console.ReadLine(), out int choice) && choice > 0 && choice <= scriptures.Count)
             {
-                var scripture = scriptures[choice - 1];
-                scripture.Reset();  // Reset visibility before memorizing
+                Scripture scripture = scriptures[choice - 1];
+                scripture.Reset();
                 RunMemorizationLoop(scripture);
             }
             else
             {
-                Console.WriteLine("Invalid selection. Press Enter to return.");
+                Console.WriteLine("Invalid choice. Press Enter to return.");
                 Console.ReadLine();
             }
         }
 
-        // Loop showing scripture and hiding words progressively until finished or quit
+        // Performs word hiding until user quits or text is fully hidden.
         private static void RunMemorizationLoop(Scripture scripture)
         {
             while (true)
             {
                 Console.Clear();
                 scripture.Display();
-
                 Console.WriteLine("\nPress Enter to hide more words or type 'quit' to stop.");
-                string input = Console.ReadLine();
+                string input = Console.ReadLine()?.Trim().ToLower();
 
-                if (input?.Trim().ToLower() == "quit")
+                if (input == "quit")
                     break;
 
                 scripture.HideRandomWords();
@@ -161,63 +142,74 @@ namespace ScriptureMemorizer
                 {
                     Console.Clear();
                     scripture.Display();
-                    Console.WriteLine("\nAll words hidden. Great work!");
-                    Console.WriteLine("Press Enter to continue...");
+                    Console.WriteLine("\nAll words hidden. Great job!");
+                    Console.WriteLine("Press Enter to return...");
                     Console.ReadLine();
                     break;
                 }
             }
         }
 
-        // Displays all scriptures currently stored
+        // Displays all currently stored scriptures.
         private static void ViewAllScriptures(List<Scripture> scriptures)
         {
             Console.Clear();
             if (scriptures.Count == 0)
             {
-                Console.WriteLine("No scriptures available.");
+                Console.WriteLine("No scriptures stored.");
             }
             else
             {
-                Console.WriteLine("=== All Stored Scriptures ===\n");
-                foreach (var s in scriptures)
+                Console.WriteLine("=== All Scriptures ===\n");
+                foreach (Scripture s in scriptures)
                 {
-                    Console.WriteLine($"{s.GetReference().ToDisplayString()} — {s.GetOriginalText()}");
-                    Console.WriteLine();
+                    Console.WriteLine($"{s.GetReference().ToDisplayString()} — {s.GetOriginalText()}\n");
                 }
             }
             Console.WriteLine("Press Enter to return...");
             Console.ReadLine();
         }
 
-        // Adds a new scripture entry and saves it
+        // Adds a user-provided scripture.
         private static void AddNewScripture(List<Scripture> scriptures)
         {
             Console.Clear();
-            Console.WriteLine("=== Add New Scripture ===");
+            Console.WriteLine("=== Add a New Scripture ===");
 
             Console.Write("Book: ");
             string book = Console.ReadLine()?.Trim();
 
-            Console.Write("Chapter: ");
-            int chapter = int.Parse(Console.ReadLine() ?? "1");
-
-            Console.Write("Start verse: ");
-            int startVerse = int.Parse(Console.ReadLine() ?? "1");
-
-            Console.Write("End verse (same as start if single verse): ");
-            int endVerse = int.Parse(Console.ReadLine() ?? startVerse.ToString());
+            int chapter = SafeIntInput("Chapter: ");
+            int startVerse = SafeIntInput("Start verse: ");
+            int endVerse = SafeIntInput("End verse (same as start if single verse): ", startVerse);
 
             Console.Write("Enter the full scripture text: ");
             string text = Console.ReadLine()?.Trim();
 
-            var reference = new Reference(book, chapter, startVerse, endVerse);
-            var scripture = new Scripture(reference, text);
+            Reference reference = new Reference(book, chapter, startVerse, endVerse);
+            Scripture scripture = new Scripture(reference, text);
             scriptures.Add(scripture);
-            ScriptureFileHelper.SaveScriptures(FilePath, scriptures);
+            ScriptureFileHelper.SaveScriptures(_filePath, scriptures);
 
             Console.WriteLine("\nScripture added successfully! Press Enter to return...");
             Console.ReadLine();
+        }
+
+        // Helper method for safe integer input.
+        private static int SafeIntInput(string prompt, int defaultValue = 1)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int result) && result > 0)
+                    return result;
+
+                if (string.IsNullOrWhiteSpace(input))
+                    return defaultValue;
+
+                Console.WriteLine("Please enter a valid positive number.");
+            }
         }
     }
 }

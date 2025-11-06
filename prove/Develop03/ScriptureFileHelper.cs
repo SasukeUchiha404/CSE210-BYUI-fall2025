@@ -5,24 +5,23 @@ using System.Linq;
 
 namespace ScriptureMemorizer
 {
-    // Handles all file input/output for saving and loading scriptures.
+    // Handles reading and writing scripture data from/to scripture.txt.
     static class ScriptureFileHelper
     {
-        // Loads all scriptures from a text file
         public static List<Scripture> LoadScriptures(string filePath)
         {
-            var scriptures = new List<Scripture>();
+            List<Scripture> scriptures = new List<Scripture>();
 
             try
             {
                 if (!File.Exists(filePath))
                     return scriptures;
 
-                foreach (var line in File.ReadAllLines(filePath))
+                string[] lines = File.ReadAllLines(filePath);
+                foreach (string line in lines)
                 {
                     if (string.IsNullOrWhiteSpace(line)) continue;
 
-                    // Expected format: Book|Chapter|StartVerse|EndVerse|Text
                     string[] parts = line.Split('|');
                     if (parts.Length < 5) continue;
 
@@ -32,7 +31,7 @@ namespace ScriptureMemorizer
                     int endVerse = int.Parse(parts[3]);
                     string text = parts[4];
 
-                    var reference = new Reference(book, chapter, startVerse, endVerse);
+                    Reference reference = new Reference(book, chapter, startVerse, endVerse);
                     scriptures.Add(new Scripture(reference, text));
                 }
             }
@@ -44,16 +43,16 @@ namespace ScriptureMemorizer
             return scriptures;
         }
 
-        // Saves all scriptures back to the file
         public static void SaveScriptures(string filePath, List<Scripture> scriptures)
         {
             try
             {
-                var lines = scriptures.Select(s =>
+                List<string> lines = scriptures.Select(s =>
                 {
-                    var r = s.GetReference();
-                    return $"{r.Book}|{r.Chapter}|{r.StartVerse}|{r.EndVerse}|{s.GetOriginalText()}";
-                });
+                    Reference r = s.GetReference();
+                    return $"{r.GetBook()}|{r.GetChapter()}|{r.GetStartVerse()}|{r.GetEndVerse()}|{s.GetOriginalText()}";
+                }).ToList();
+
                 File.WriteAllLines(filePath, lines);
             }
             catch (Exception ex)

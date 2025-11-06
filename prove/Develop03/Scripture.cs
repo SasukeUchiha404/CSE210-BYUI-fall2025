@@ -4,66 +4,51 @@ using System.Linq;
 
 namespace ScriptureMemorizer
 {
-    // Represents a complete scripture, including the reference and all words.
-    // Handles word hiding, reset, and display logic.
+    // Manages a scripture verse or passage text for memorization.
     class Scripture
     {
-        private readonly Reference reference; // Scripture reference (e.g., John 3:16)
-        private readonly List<Word> words;    // List of words in the scripture
-        private readonly Random random;       // Random generator for hiding words
+        private Reference _reference;
+        private List<Word> _words;
+        private Random _random;
 
         public Scripture(Reference reference, string text)
         {
-            this.reference = reference;
-            this.random = new Random();
-            this.words = text.Split(' ')
-                             .Select(word => new Word(word))
-                             .ToList();
+            _reference = reference;
+            _random = new Random();
+            _words = text.Split(' ').Select(w => new Word(w)).ToList();
         }
 
-        // Displays scripture reference and current visible words
+        public Reference GetReference() { return _reference; }
+
         public void Display()
         {
-            Console.WriteLine(reference.ToDisplayString());
+            Console.WriteLine(_reference.ToDisplayString());
             Console.WriteLine(GetVisibleText());
         }
 
-        // Randomly hides a few words that are still visible
         public void HideRandomWords()
         {
-            int wordsToHide = random.Next(2, 5); // randomly hide 2–4 words 
-            var visible = words.Where(w => !w.IsHidden()).ToList();
+            int toHide = _random.Next(2, 5);
+            List<Word> visible = _words.Where(w => !w.IsHidden()).ToList();
 
-            for (int i = 0; i < wordsToHide && visible.Count > 0; i++)
+            for (int i = 0; i < toHide && visible.Count > 0; i++)
             {
-                int index = random.Next(visible.Count);
+                int index = _random.Next(visible.Count);
                 visible[index].Hide();
                 visible.RemoveAt(index);
             }
         }
 
-        // Returns true if all words are hidden
-        public bool IsCompletelyHidden() =>
-            words.All(w => w.IsHidden());
+        public bool IsCompletelyHidden() { return _words.All(w => w.IsHidden()); }
 
-        // Returns the scripture text with hidden words replaced by underscores
-        public string GetVisibleText() =>
-            string.Join(" ", words.Select(w => w.GetDisplayText()));
+        public string GetVisibleText() { return string.Join(" ", _words.Select(w => w.GetDisplayText())); }
 
-        // Returns original scripture text (for saving)
-        public string GetOriginalText() =>
-            string.Join(" ", words.Select(w => w.GetText()));
+        public string GetOriginalText() { return string.Join(" ", _words.Select(w => w.GetText())); }
 
-        // Returns the scripture reference
-        public Reference GetReference() => reference;
-
-        // Resets visibility state of all words to visible
         public void Reset()
         {
-            foreach (var word in words)
-            {
-                word.Unhide(); // make word visible again
-            }
+            foreach (Word word in _words)
+                word.Unhide();
         }
     }
 }
