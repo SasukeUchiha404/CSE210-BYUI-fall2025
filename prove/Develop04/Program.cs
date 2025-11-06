@@ -1,25 +1,76 @@
-// Program.cs
-// Entry point for the Mindfulness Program.
-// Exceeding Requirements: Includes spinner animations, structured inheritance, and clean termination.
+// ============================================================================
+// Mindfulness Program
+// ----------------------------------------------------------------------------
+// Description:
+//     This console-based application guides users through three mindfulness
+//     activities to promote focus and relaxation:
+//       1. Breathing Activity
+//       2. Reflection Activity
+//       3. Listing Activity
+//     Each activity tracks its own duration and uses simple console animations.
+//
+// Menu Options:
+//     === Mindfulness Program ===
+//     1. Start Breathing Activity
+//     2. Start Reflecting Activity
+//     3. Start Listing Activity
+//     4. Quit
+//
+// Standards Applied:
+//     - C# language with PascalCase class/method names
+//     - _camelCase for private fields
+//     - Explicit getter and setter methods where needed
+//     - Each class in its own file named accordingly (e.g., Activity.cs)
+//     - Consistent formatting and whitespace for readability
+//
+// Updated: November 6, 2025
+// Author:  Christian Chan
+// ============================================================================
 
 using System;
 
-// Main class controlling user interaction and application flow.
-public class Program
+class Program
 {
-    public static void Main(string[] args)
+    static void Main()
     {
-        Menu menu = new Menu();
-        bool running = true; // Controls the main loop
-
-        // Repeat menu system until user selects Quit
-        while (running)
+        while (true)
         {
-            menu.DisplayMenu();
-            running = menu.RunSelectedActivity(); // Returns false if the user quits
-        }
+            Console.Clear();
+            Console.WriteLine("=== Mindfulness Program ===");
+            Console.WriteLine("1. Start Breathing Activity");
+            Console.WriteLine("2. Start Reflecting Activity");
+            Console.WriteLine("3. Start Listing Activity");
+            Console.WriteLine("4. Quit");
+            Console.Write("Select an option (1–4): ");
 
-        // Once loop ends, terminate program gracefully.
-        Environment.Exit(0);
+            string input = Console.ReadLine()?.Trim();
+
+            switch (input)
+            {
+                case "1":
+                    BreathingActivity breathing = new BreathingActivity();
+                    breathing.Run();
+                    break;
+
+                case "2":
+                    ReflectionActivity reflection = new ReflectionActivity();
+                    reflection.Run();
+                    break;
+
+                case "3":
+                    ListingActivity listing = new ListingActivity();
+                    listing.Run();
+                    break;
+
+                case "4":
+                    Console.WriteLine("Goodbye!");
+                    return;
+
+                default:
+                    Console.WriteLine("Invalid selection. Press Enter to try again...");
+                    Console.ReadLine();
+                    break;
+            }
+        }
     }
 }
