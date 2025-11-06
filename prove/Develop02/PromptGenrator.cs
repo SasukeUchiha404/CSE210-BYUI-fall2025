@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-// Class responsible for providing random prompts from a predefined list
+// Generates random journaling prompts for new entries.
 class PromptGenerator
 {
-    // List of prompts from which to randomly select
-    private List<string> _listPrompt = new List<string>
+    private List<string> _prompts = new List<string>
     {
         "Who was the most interesting person I interacted with today?",
         "What was the best part of my day?",
@@ -16,12 +15,10 @@ class PromptGenerator
         "What made me smile today?"
     };
 
-    // Returns a random prompt string from the list
     public string GetPrompt()
     {
-        Random rnd = new Random();                // Create new random number generator
-        int index = rnd.Next(_listPrompt.Count); // Generate a random index within list bounds
-        return _listPrompt[index];                // Return the randomly selected prompt
+        Random rnd = new Random();
+        int index = rnd.Next(_prompts.Count);
+        return _prompts[index];
     }
 }
-

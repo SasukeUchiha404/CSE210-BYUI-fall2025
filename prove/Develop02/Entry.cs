@@ -1,17 +1,20 @@
 using System;
 
-// Represents a single journal entry with date, prompt shown, and user's response
+// Represents a single journal entry containing date, prompt, and response.
 class Entry
 {
-    public string DateText { get; }           // Date string for the entry
-    public string Prompt { get; }             // Prompt text shown when entry was created
-    public string EntryText { get; }          // User's journal response for this entry
+    private string _dateText;
+    private string _prompt;
+    private string _entryText;
 
-    // Constructor initializes all properties
     public Entry(string date, string prompt, string entryText)
     {
-        DateText = date;
-        Prompt = prompt;
-        EntryText = entryText;
+        _dateText = date;
+        _prompt = prompt;
+        _entryText = entryText;
     }
+
+    public string GetDateText() { return _dateText; }
+    public string GetPrompt() { return _prompt; }
+    public string GetEntryText() { return _entryText; }
 }
