@@ -1,0 +1,91 @@
+@startuml Diagram
+title Mindfulness Program Class Diagram
+
+' Base Activity class
+class Activity {
+  - _name : String
+  - _description : String
+  - _duration : int
+  + StartMessage() : void
+  + EndMessage() : void
+  + PauseWithAnimation(seconds : int) : void
+  + Run() : void
+}
+
+note right of Activity
+The Activity class is the base class that contains 
+shared attributes and methods for all types of 
+mindfulness activities. It defines the starting 
+and ending messages as well as timing behavior.
+end note
+
+' Subclasses
+class BreathingActivity {
+  + Run() : void
+  + BreatheInOutCycle() : void
+}
+
+note right of BreathingActivity
+Handles guided breathing exercises using alternating 
+messages of "Breathe In" and "Breathe Out" for 
+the specified duration.
+end note
+
+class ReflectionActivity {
+  - _reflectionPrompts : List<String>
+  - _reflectionQuestions : List<String>
+  + Run() : void
+  + DisplayRandomPrompt() : void
+  + AskReflectionQuestions() : void
+}
+
+note right of ReflectionActivity
+Guides users through reflective thinking by selecting 
+random prompts and questions to help them explore 
+their past experiences more deeply.
+end note
+
+class ListingActivity {
+  - _listingPrompts : List<String>
+  - _userItems : List<String>
+  + Run() : void
+  + DisplayRandomPrompt() : void
+  + CollectUserList() : void
+}
+
+note right of ListingActivity
+Encourages the user to list positive or meaningful 
+items related to a selected prompt, fostering gratitude 
+and mindfulness.
+end note
+
+class Menu {
+  + DisplayMenu() : void
+  + SelectActivity() : Activity
+  + RunSelectedActivity() : void
+}
+
+note left of Menu
+Displays activity options to the user and 
+instantiates the chosen activity to run it. 
+Serves as the main navigation point.
+end note
+
+class Program {
+  + Main(args : String[]) : void
+}
+
+note right of Program
+Acts as the entry point for the application. 
+Initializes the menu and starts program execution.
+end note
+
+' Relationships with comments
+Activity <|-- BreathingActivity : inherits\nshared methods and attributes
+Activity <|-- ReflectionActivity : inherits\nshared methods and attributes
+Activity <|-- ListingActivity : inherits\nshared methods and attributes
+
+Program --> Menu : creates and uses
+Menu --> Activity : instantiates and runs
+
+@enduml
