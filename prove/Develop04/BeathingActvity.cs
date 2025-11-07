@@ -25,6 +25,8 @@ public class BreathingActivity : Activity
 
             Console.Write("Now breathe out...");
             CountDown(3);
+
+            Console.Write("");
         }
 
         EndMessage();
