@@ -10,7 +10,6 @@
 //     Each activity tracks its own duration and uses simple console animations.
 //
 // Menu Options:
-//     === Mindfulness Program ===
 //     1. Start Breathing Activity
 //     2. Start Reflecting Activity
 //     3. Start Listing Activity

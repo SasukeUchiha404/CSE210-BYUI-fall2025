@@ -1,0 +1,106 @@
+@startuml
+title Eternal Quest Program
+
+abstract class Goal {
+  - name : String
+  - description : String
+  - points : int
+  - completed : boolean
+  + recordEvent() : int
+  + showStatus() : String
+}
+note right of Goal
+Abstract base class.  
+Holds common fields and interface for all goal types.
+end note
+
+class SimpleGoal {
+  + recordEvent() : int
+  + showStatus() : String
+}
+note left of SimpleGoal
+One-time goal.  
+Marks complete after single event and awards fixed points.
+end note
+
+class EternalGoal {
+  + recordEvent() : int
+  + showStatus() : String
+}
+note left of EternalGoal
+Repeatable goal.  
+Never completes; awards points every time recorded.
+end note
+
+class ChecklistGoal {
+  - targetCount : int
+  - currentCount : int
+  - bonus : int
+  + recordEvent() : int
+  + showStatus() : String
+}
+note left of ChecklistGoal
+Goal that requires multiple completions.  
+Tracks count progress and awards bonus on completion.
+end note
+
+class ProgressGoal {
+  - totalRequired : int
+  - currentProgress : int
+  + recordEvent(progress : int) : int
+  + showStatus() : String
+}
+note right of ProgressGoal
+Tracks incremental progress toward a big target.  
+Awards points proportional to effort.
+end note
+
+class NegativeGoal {
+  + recordEvent() : int
+  + showStatus() : String
+}
+note right of NegativeGoal
+Tracks negative behavior or bad habits.  
+Subtracts points when recorded.
+end note
+
+class User {
+  - goals : List<Goal>
+  - score : int
+  - experience : int
+  - level : int
+  + addGoal(g : Goal)
+  + recordGoal(name : String, progress : int = 1)
+  + showGoals() : String
+  + saveProgress()
+  + loadProgress()
+  + getScore() : int
+  + getExperience() : int
+  + getLevel() : int
+  + addExperience(points : int)
+  + checkLevelUp() : void
+}
+note right of User
+Represents the player/user.  
+Manages goals, score, experience, level, and data persistence.
+end note
+
+class Program {
+  + main(args : String[]) : void
+}
+note right of Program
+Main program class.  
+Controls app startup, user interaction, and coordinates goals and scoring.
+end note
+
+' Relationships
+User -- "*" Goal : manages
+SimpleGoal -right-|> Goal : inherits
+EternalGoal -down-|> Goal : inherits
+ChecklistGoal -up-|> Goal : inherits
+ProgressGoal -up-|> Goal : inherits
+NegativeGoal -left-|> Goal : inherits
+Program --> User : controls
+
+
+@enduml
