@@ -1,0 +1,163 @@
+@startuml
+
+' Pet is an abstract base class for all pet types
+abstract class Pet {
+    -name : String
+    -age : int
+    -hunger : int
+    -happiness : int
+    -health : int
+    +feed()
+    +play()
+    +sleep()
+    +status()
+}
+note right of Pet
+Abstract base class representing a generic pet.
+Holds common attributes and behaviors.
+Encapsulates pet state.
+Supports polymorphism via overridden methods.
+end note
+
+class Dog extends Pet {
+    +learnTrick()
+    +bark()
+}
+note right of Dog
+Represents a dog pet.
+Overrides behaviors and adds dog-specific actions.
+end note
+
+class Cat extends Pet {
+    +chaseLaser()
+    +meow()
+}
+note right of Cat
+Represents a cat pet.
+Custom actions for cat behaviors.
+end note
+
+class Bird extends Pet {
+    +sing()
+    +fly()
+}
+note right of Bird
+Represents a bird pet.
+Unique bird-specific methods.
+end note
+
+class RobotPet extends Pet {
+    +recharge()
+    +upgrade()
+}
+note right of RobotPet
+Represents a robotic pet type.
+Includes recharge and upgrade features.
+end note
+
+' User owns multiple pets and manages them
+class User {
+    -pets : List<Pet>
+    +adoptPet()
+    +careForPet()
+    +trackAchievements()
+}
+note left of User
+Manages a collection of pets.
+Provides interaction and tracking features.
+end note
+
+' Item is an abstract base class for objects usable by pets
+abstract class Item {
+    -name: String
+    +use(pet: Pet)
+}
+note right of Item
+Abstract base for items (food, toys, medicine).
+Defines interface to interact with pets.
+end note
+
+class Food extends Item {
+    +restoreHunger()
+}
+note right of Food
+Food item to reduce pet hunger.
+Overrides use() to feed pets.
+end note
+
+class Toy extends Item {
+    +increaseHappiness()
+}
+note right of Toy
+Toy item to increase pet happiness.
+Custom play features.
+end note
+
+class Medicine extends Item {
+    +healPet()
+}
+note right of Medicine
+Medicine item to heal pets.
+Overrides use() for healing.
+end note
+
+class Accessory extends Item {
+    +customizePet()
+}
+note right of Accessory
+Accessory used for pet customization.
+end note
+
+class GameEvent {
+    +triggerEvent()
+    +randomizeEvent()
+}
+note left of GameEvent
+Handles random game events affecting pets.
+end note
+
+class MiniGame {
+    +startGame(pet: Pet)
+    +getResult()
+}
+note left of MiniGame
+Starts mini-games involving pets.
+Provides game results.
+end note
+
+' Program is the application entry point with Main method
+class Program {
+    +Main(args: String[])
+}
+note left of Program
+Entry point of the application.
+Interacts with User and starts simulation.
+end note
+
+' Relationships with labels:
+User "1" -- "0..*" Pet : owns >
+note on link
+User owns multiple pets
+end note
+
+Pet "1" -- "0..*" Item : uses >
+note on link
+Pets use multiple items (e.g., food, toys)
+end note
+
+Pet <|-- Dog : "inherits"
+Pet <|-- Cat : "inherits"
+Pet <|-- Bird : "inherits"
+Pet <|-- RobotPet : "inherits"
+
+Item <|-- Food : "inherits"
+Item <|-- Toy : "inherits"
+Item <|-- Medicine : "inherits"
+Item <|-- Accessory : "inherits"
+
+Program ..> User : interacts with >
+note on link
+Program interacts with User class to control simulation
+end note
+
+@enduml
