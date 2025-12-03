@@ -119,7 +119,7 @@ class Program
         Console.WriteLine("2. Play");
         Console.WriteLine("3. Sleep");
         Console.WriteLine("4. Show Status");
-        Console.WriteLine("5. Make Sound (Polymorphism)");
+        Console.WriteLine("5. Make Sound");  // Polymorphism
         Console.WriteLine("6. Show Items");
         Console.Write("Choose an action: ");
 
