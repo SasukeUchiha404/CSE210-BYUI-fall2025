@@ -20,6 +20,7 @@ namespace ScriptureMemorizer
 
         public string GetDisplayText()
         {
+            // Console.WriteLine($"{_isHidden} {_text}");
             return _isHidden ? new string('_', _text.Length) : _text;
         }
 
