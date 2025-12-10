@@ -14,6 +14,12 @@ class Cat : Pet
 
     public override void Play()
     {
+        if (IsDead())
+        {
+            Console.WriteLine(GetName() + " is no longer alive.");
+            return;
+        }
+
         Console.WriteLine(GetName() + " is chasing a laser dot.");
         base.Play();
     }

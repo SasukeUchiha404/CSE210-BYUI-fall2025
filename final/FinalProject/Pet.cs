@@ -9,6 +9,13 @@ abstract class Pet
     private int _hunger;
     private int _happiness;
     private int _health;
+    private bool _isDead;
+
+    // Track how many times this pet has been revived.
+    private int _reviveCount;
+
+    // Track whether the last action on this pet was medicine.
+    private bool _lastActionWasMedicine;
 
     // Each pet has a list of items (accessories, toys, etc.).
     private List<Item> _items;
@@ -21,6 +28,9 @@ abstract class Pet
         _happiness = 50;
         _health = 50;
         _items = new List<Item>();
+        _isDead = false;
+        _reviveCount = 0;
+        _lastActionWasMedicine = false;
     }
 
     public string GetName()
@@ -51,6 +61,16 @@ abstract class Pet
     public void SetHunger(int value)
     {
         _hunger = value;
+
+        if (_hunger < 0)
+        {
+            _hunger = 0;
+        }
+
+        if (_hunger > 100)
+        {
+            _hunger = 100;
+        }
     }
 
     public int GetHappiness()
@@ -61,6 +81,16 @@ abstract class Pet
     public void SetHappiness(int value)
     {
         _happiness = value;
+
+        if (_happiness < 0)
+        {
+            _happiness = 0;
+        }
+
+        if (_happiness > 100)
+        {
+            _happiness = 100;
+        }
     }
 
     public int GetHealth()
@@ -71,6 +101,60 @@ abstract class Pet
     public void SetHealth(int value)
     {
         _health = value;
+
+        if (_health <= 0)
+        {
+            _health = 0;
+            MarkDead();
+        }
+        else
+        {
+            if (_health > 100)
+            {
+                _health = 100;
+            }
+
+            // Any positive health means the pet is alive again.
+            if (_isDead)
+            {
+                _isDead = false;
+                Console.WriteLine(_name + " has been revived!");
+            }
+        }
+    }
+
+    public bool IsDead()
+    {
+        return _isDead;
+    }
+
+    private void MarkDead()
+    {
+        if (!_isDead)
+        {
+            _isDead = true;
+            Console.WriteLine(_name + " has died...");
+        }
+    }
+
+    public int GetReviveCount()
+    {
+        return _reviveCount;
+    }
+
+    public void IncrementReviveCount()
+    {
+        _reviveCount = _reviveCount + 1;
+    }
+
+    public bool GetLastActionWasMedicine()
+    {
+        return _lastActionWasMedicine;
+    }
+
+    public void SetLastActionWasMedicine(bool value)
+    {
+        _lastActionWasMedicine = value;
     }
 
     // Adds an item (e.g., accessory or toy) to this pet.
@@ -110,37 +194,47 @@ abstract class Pet
     // Feeds the pet and reduces hunger.
     public virtual void Feed()
     {
-        Console.WriteLine(_name + " is eating.");
-        _hunger = _hunger - 10;
-
-        if (_hunger < 0)
+        if (_isDead)
         {
-            _hunger = 0;
+            Console.WriteLine(_name + " is no longer alive.");
+            return;
         }
+
+        // Any non-medicine action clears the medicine flag.
+        _lastActionWasMedicine = false;
+
+        Console.WriteLine(_name + " is eating.");
+        SetHunger(_hunger - 10);
     }
 
     // Plays with the pet and increases happiness.
     public virtual void Play()
     {
-        Console.WriteLine(_name + " is playing.");
-        _happiness = _happiness + 10;
-
-        if (_happiness > 100)
+        if (_isDead)
         {
-            _happiness = 100;
+            Console.WriteLine(_name + " is no longer alive.");
+            return;
         }
+
+        _lastActionWasMedicine = false;
+
+        Console.WriteLine(_name + " is playing.");
+        SetHappiness(_happiness + 10);
     }
 
     // Lets the pet sleep and restores health.
     public virtual void Sleep()
     {
-        Console.WriteLine(_name + " is sleeping.");
-        _health = _health + 10;
-
-        if (_health > 100)
+        if (_isDead)
         {
-            _health = 100;
+            Console.WriteLine(_name + " is no longer alive.");
+            return;
         }
+
+        _lastActionWasMedicine = false;
+
+        Console.WriteLine(_name + " is sleeping.");
+        SetHealth(_health + 10);
     }
 
     // Displays the pet's current status, including item count.
@@ -153,5 +247,7 @@ abstract class Pet
         Console.WriteLine("Happiness: " + _happiness);
         Console.WriteLine("Health: " + _health);
         Console.WriteLine("Number of Items: " + _items.Count);
+        Console.WriteLine("Revives Used: " + _reviveCount + "/3");
+        Console.WriteLine("Is Dead: " + (_isDead ? "Yes" : "No"));
     }
 }

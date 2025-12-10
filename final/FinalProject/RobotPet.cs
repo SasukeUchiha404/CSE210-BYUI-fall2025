@@ -15,19 +15,24 @@ class RobotPet : Pet
     // Robot-specific behavior for restoring health.
     public void Recharge()
     {
-        Console.WriteLine(GetName() + " is recharging its battery.");
-        int newHealth = GetHealth() + 20;
-
-        if (newHealth > 100)
+        if (IsDead())
         {
-            newHealth = 100;
+            Console.WriteLine(GetName() + " is no longer functioning.");
+            return;
         }
 
-        SetHealth(newHealth);
+        Console.WriteLine(GetName() + " is recharging its battery.");
+        SetHealth(GetHealth() + 20);
     }
 
     public override void Sleep()
     {
+        if (IsDead())
+        {
+            Console.WriteLine(GetName() + " is no longer functioning.");
+            return;
+        }
+
         Console.WriteLine(GetName() + " powers down instead of sleeping.");
         Recharge();
     }

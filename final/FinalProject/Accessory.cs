@@ -9,6 +9,12 @@ class Accessory : Item
 
     public override void Use(Pet pet)
     {
+        if (pet.IsDead())
+        {
+            Console.WriteLine(pet.GetName() + " is no longer alive.");
+            return;
+        }
+
         Console.WriteLine("Using accessory '" + GetName() + "' on " + pet.GetName());
         Console.WriteLine(pet.GetName() + " looks stylish!");
     }

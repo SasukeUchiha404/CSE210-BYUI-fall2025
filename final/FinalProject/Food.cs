@@ -9,16 +9,15 @@ class Food : Item
 
     public override void Use(Pet pet)
     {
-        Console.WriteLine("Using food '" + GetName() + "' on " + pet.GetName());
-
-        int newHunger = pet.GetHunger() - 20;
-
-        if (newHunger < 0)
+        if (pet.IsDead())
         {
-            newHunger = 0;
+            Console.WriteLine(pet.GetName() + " is no longer alive.");
+            return;
         }
 
-        pet.SetHunger(newHunger);
+        Console.WriteLine("Using food '" + GetName() + "' on " + pet.GetName());
+
+        pet.SetHunger(pet.GetHunger() - 20);
         Console.WriteLine(pet.GetName() + " looks less hungry now.");
     }
 }

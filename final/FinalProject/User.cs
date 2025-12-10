@@ -23,6 +23,17 @@ class User
         _name = name;
     }
 
+    // Removes a pet from the user's collection by index.
+    public void RemovePet(int index)
+    {
+        if (index >= 0 && index < _pets.Count)
+        {
+            Pet pet = _pets[index];
+            _pets.RemoveAt(index);
+            Console.WriteLine("Pet " + pet.GetName() + " removed from collection.");
+        }
+    }
+
     // Adds a pet to the user's collection.
     public void AddPet(Pet pet)
     {
@@ -39,7 +50,7 @@ class User
     public void ShowPets()
     {
         Console.WriteLine();
-        Console.WriteLine("Pets owned by " + _name + ":");
+        Console.WriteLine("Pets owned by " + _name + " (" + _pets.Count + "/8):");
 
         if (_pets.Count == 0)
         {
@@ -50,7 +61,10 @@ class User
         for (int i = 0; i < _pets.Count; i++)
         {
             Pet pet = _pets[i];
-            Console.WriteLine((i + 1) + ". " + pet.GetName() + " (" + pet.GetType().Name + ")");
+            string status = pet.IsDead() ? " [DEAD]" : "";
+            Console.WriteLine(
+                (i + 1) + ". " + pet.GetName() + " (" + pet.GetType().Name + ")" + status
+            );
         }
     }
 }

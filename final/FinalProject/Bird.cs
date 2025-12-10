@@ -14,6 +14,12 @@ class Bird : Pet
 
     public override void Play()
     {
+        if (IsDead())
+        {
+            Console.WriteLine(GetName() + " is no longer alive.");
+            return;
+        }
+
         Console.WriteLine(GetName() + " is flying around happily.");
         base.Play();
     }

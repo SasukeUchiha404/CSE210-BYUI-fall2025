@@ -9,16 +9,15 @@ class Toy : Item
 
     public override void Use(Pet pet)
     {
-        Console.WriteLine("Using toy '" + GetName() + "' with " + pet.GetName());
-
-        int newHappiness = pet.GetHappiness() + 20;
-
-        if (newHappiness > 100)
+        if (pet.IsDead())
         {
-            newHappiness = 100;
+            Console.WriteLine(pet.GetName() + " is no longer alive.");
+            return;
         }
 
-        pet.SetHappiness(newHappiness);
+        Console.WriteLine("Using toy '" + GetName() + "' with " + pet.GetName());
+
+        pet.SetHappiness(pet.GetHappiness() + 20);
         Console.WriteLine(pet.GetName() + " looks happier!");
     }
 }
