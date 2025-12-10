@@ -10,6 +10,7 @@ class Toy : Item
     public override void Use(Pet pet)
     {
         Console.WriteLine("Using toy '" + GetName() + "' with " + pet.GetName());
+
         int newHappiness = pet.GetHappiness() + 20;
 
         if (newHappiness > 100)
@@ -18,5 +19,6 @@ class Toy : Item
         }
 
         pet.SetHappiness(newHappiness);
+        Console.WriteLine(pet.GetName() + " looks happier!");
     }
 }

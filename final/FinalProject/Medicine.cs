@@ -10,6 +10,7 @@ class Medicine : Item
     public override void Use(Pet pet)
     {
         Console.WriteLine("Using medicine '" + GetName() + "' on " + pet.GetName());
+
         int newHealth = pet.GetHealth() + 20;
 
         if (newHealth > 100)
@@ -18,5 +19,6 @@ class Medicine : Item
         }
 
         pet.SetHealth(newHealth);
+        Console.WriteLine(pet.GetName() + " looks healthier!");
     }
 }

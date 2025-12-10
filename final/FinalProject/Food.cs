@@ -10,6 +10,7 @@ class Food : Item
     public override void Use(Pet pet)
     {
         Console.WriteLine("Using food '" + GetName() + "' on " + pet.GetName());
+
         int newHunger = pet.GetHunger() - 20;
 
         if (newHunger < 0)
@@ -18,5 +19,6 @@ class Food : Item
         }
 
         pet.SetHunger(newHunger);
+        Console.WriteLine(pet.GetName() + " looks less hungry now.");
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-// Accessory item that could visually customize a pet (placeholder behavior for now).
+// Accessory item that customizes a pet (cosmetic effect).
 class Accessory : Item
 {
     public Accessory(string name) : base(name)
