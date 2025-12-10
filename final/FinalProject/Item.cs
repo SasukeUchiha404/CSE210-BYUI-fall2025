@@ -20,6 +20,6 @@ abstract class Item
         _name = name;
     }
 
-    // Uses this item on a pet.
+    // Uses this item on a pet (polymorphic).
     public abstract void Use(Pet pet);
 }

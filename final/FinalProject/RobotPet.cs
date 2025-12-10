@@ -12,6 +12,7 @@ class RobotPet : Pet
         Console.WriteLine(GetName() + " beeps electronically.");
     }
 
+    // Robot-specific behavior for restoring health.
     public void Recharge()
     {
         Console.WriteLine(GetName() + " is recharging its battery.");
