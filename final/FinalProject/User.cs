@@ -29,7 +29,7 @@ class User
         _pets.Add(pet);
     }
 
-    // Returns the list of pets for external read-only style use.
+    // Returns the list of pets for display and interaction.
     public List<Pet> GetPets()
     {
         return _pets;
