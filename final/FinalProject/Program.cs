@@ -11,7 +11,7 @@
 //    - Pets can be added at runtime; health can drop to 0 and pets can die.
 //    - Pets that die can be revived up to 3 times with Medicine.
 // 
-// Updated: December 10, 2025
+// Updated: December 11, 2025
 // Standards:
 //    - PascalCase for class and method names
 //    - _camelCase for private fields
@@ -308,7 +308,30 @@ class Program
         {
             selectedPet.Play();
         }
-        // ... other actions ...
+        else if (action == "3")
+        {
+            selectedPet.Sleep();
+        }
+        else if (action == "4")
+        {
+            selectedPet.ShowStatus();
+        }
+        else if (action == "5")
+        {
+            selectedPet.MakeSound();
+        }
+        else if (action == "6")
+        {
+            selectedPet.ShowItems();
+        }
+        else if (action == "7")
+        {
+            UsePetItem(selectedPet);
+        }
+        else if (action == "8")
+        {
+            PlayMiniGameWithPet(selectedPet);
+        }
         else if (action == "9")
         {
             GiveMedicineToPet(selectedPet);
