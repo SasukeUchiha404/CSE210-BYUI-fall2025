@@ -288,7 +288,7 @@ class Program
         Console.WriteLine("2. Play");
         Console.WriteLine("3. Sleep");
         Console.WriteLine("4. Show Status");
-        Console.WriteLine("5. Make Sound (Polymorphism)");
+        Console.WriteLine("5. Make Sound");
         Console.WriteLine("6. Show Items");
         Console.WriteLine("7. Use Item");
         Console.WriteLine("8. Play Mini-Game");
